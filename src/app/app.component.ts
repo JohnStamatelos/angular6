@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Article } from './article/article.model';
+import { listLazyRoutes } from '@angular/compiler/src/aot/lazy_routes';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,29 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'angular-reddit';
+  articles: Article[]; //article is an array of Articles
+  //also can be written as 
+  // articles:Array<Article>
+
+  constructor() {
+    this.articles = [
+      new Article('Angular', 'https://angular.io/', 3),
+      new Article('Fullstack', 'https://fullstack.io', 2),
+      new Article('Angular Homepage', 'https://angular.io', 1)
+    ];
+  }
+
+  addArticle(title: string, link: HTMLInputElement): boolean {
+    console.log(`Adding article title: ${title} and link: ${link.value}`);
+    this.articles.push(new Article(title, link.value, 0));
+    link.value='';
+    title ='';
+    return false;
+  }
+
+  sortedArticles():Article[]{
+    return this.articles.sort((a: Article, b: Article)=> b.votes - a.votes);
+  }
+
+  
 }
